@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 2 — Ad Hoc Wireless Networks Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f8f9fc; --bg2: #ffffff; --bg3: #f0f2f7;
+  --text: #1a1d2e; --text2: #5a5f7a; --text3: #8b90a5;
+  --accent: #4f6ef7; --accent-bg: #eef1fe;
+  --green: #0d9f61; --green-bg: #e8faf1; --green-border: #b4ecd0;
+  --red: #dc2c2c; --red-bg: #fef0f0; --red-border: #f5c4c4;
+  --amber: #c27a0e; --amber-bg: #fef8ec; --amber-border: #f5dfa8;
+  --info: #2563eb; --info-bg: #eff5ff; --info-border: #bcd4fc;
+  --purple: #7c3aed; --purple-bg: #f3effe;
+  --teal: #0e7f6e; --teal-bg: #e6f7f4;
+  --border: #e2e5ef; --shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 12px rgba(0,0,0,.04);
+  --shadow-lg: 0 4px 20px rgba(0,0,0,.08); --radius: 14px; --radius-sm: 10px;
+}
+[data-theme="dark"] {
+  --bg: #0f1117; --bg2: #1a1d2a; --bg3: #242838;
+  --text: #e4e6f0; --text2: #a0a4bc; --text3: #6b7094;
+  --accent: #7b93f9; --accent-bg: #1e2444;
+  --green: #34d399; --green-bg: #0b2e1f; --green-border: #145a38;
+  --red: #f87171; --red-bg: #2e0f0f; --red-border: #5a1a1a;
+  --amber: #fbbf24; --amber-bg: #2e2208; --amber-border: #5a4210;
+  --info: #60a5fa; --info-bg: #0f1d3a; --info-border: #1e3a6a;
+  --purple: #a78bfa; --purple-bg: #1e1640;
+  --teal: #5eead4; --teal-bg: #0b2a25;
+  --border: #2a2e3e; --shadow: 0 1px 3px rgba(0,0,0,.3); --shadow-lg: 0 4px 20px rgba(0,0,0,.4);
+}
+body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; transition: background .3s, color .3s; }
+.progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--purple)); z-index: 100; transition: width .2s; width: 0; }
+.guide { max-width: 780px; margin: 0 auto; padding: 24px 20px 60px; }
+/* Header */
+.header { text-align: center; padding: 32px 0 24px; position: relative; }
+.header h1 { font-size: 26px; font-weight: 700; background: linear-gradient(135deg, var(--accent), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 6px; }
+.header p { font-size: 14px; color: var(--text2); }
+.theme-toggle { position: absolute; top: 32px; right: 0; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg2); cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all .2s; box-shadow: var(--shadow); }
+.theme-toggle:hover { transform: scale(1.1); box-shadow: var(--shadow-lg); }
+/* Search */
+.search-wrap { position: relative; margin-bottom: 16px; }
+.search-wrap input { width: 100%; padding: 12px 16px 12px 42px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg2); color: var(--text); font-size: 14px; font-family: inherit; transition: all .2s; box-shadow: var(--shadow); }
+.search-wrap input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
+.search-wrap .icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text3); font-size: 16px; pointer-events: none; }
+/* TOC */
+.toc { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+.toc-btn { padding: 8px 16px; border-radius: 24px; border: 1px solid var(--border); background: var(--bg2); color: var(--text2); font-size: 13px; font-weight: 500; cursor: pointer; transition: all .25s; font-family: inherit; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+.toc-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-lg); color: var(--text); }
+.toc-btn.active { background: linear-gradient(135deg, var(--accent), var(--purple)); color: #fff; border-color: transparent; box-shadow: 0 2px 12px rgba(79,110,247,.3); }
+/* Sections */
+.section { display: none; animation: fadeSlide .4s ease; }
+.section.active { display: block; }
+@keyframes fadeSlide { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.section-title { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 4px; display: flex; align-items: center; gap: 10px; }
+.section-sub { font-size: 13px; color: var(--text2); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); line-height: 1.6; }
+/* Important marker */
+.card.important { border-left: 3px solid #f59e0b; }
+.card.important .card-header::after { content: '⭐ IMPORTANT'; font-size: 10px; font-weight: 700; color: #f59e0b; background: #fef3c7; padding: 2px 8px; border-radius: 10px; letter-spacing: .5px; white-space: nowrap; align-self: center; }
+[data-theme="dark"] .card.important .card-header::after { background: #422006; color: #fbbf24; }
+.section-title .imp-star { color: #f59e0b; font-size: 14px; background: #fef3c7; padding: 2px 8px; border-radius: 10px; font-weight: 700; font-size: 10px; }
+[data-theme="dark"] .section-title .imp-star { background: #422006; color: #fbbf24; }
+/* Cards */
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 16px; box-shadow: var(--shadow); transition: all .25s; overflow: hidden; }
+.card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+.card-header { padding: 16px 18px; cursor: pointer; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.card-header h3 { font-size: 15px; font-weight: 600; color: var(--text); }
+.card-toggle { width: 24px; height: 24px; border-radius: 6px; background: var(--bg3); border: none; color: var(--text3); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .3s; flex-shrink: 0; font-size: 12px; }
+.card.open .card-toggle { transform: rotate(180deg); }
+.card-body { padding: 0 18px 16px; display: none; }
+.card.open .card-body { display: block; animation: fadeSlide .3s ease; }
+.card p, .card li { font-size: 13.5px; color: var(--text2); line-height: 1.8; }
+.card ul { padding-left: 18px; margin-top: 8px; }
+.card li { margin-bottom: 5px; }
+.card li strong { color: var(--text); }
+/* Badges */
+.badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; margin-bottom: 8px; letter-spacing: .3px; text-transform: uppercase; }
+.badge-blue { background: var(--info-bg); color: var(--info); }
+.badge-amber { background: var(--amber-bg); color: var(--amber); }
+.badge-purple { background: var(--purple-bg); color: var(--purple); }
+.badge-teal { background: var(--teal-bg); color: var(--teal); }
+/* Example box */
+.example-box { background: var(--info-bg); border-left: 3px solid var(--info); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 14px 16px; margin-top: 12px; font-size: 13px; color: var(--info); line-height: 1.75; }
+.example-box strong { font-weight: 600; }
+/* Advantages & Disadvantages */
+.adv-dis { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+.adv { background: var(--green-bg); border: 1px solid var(--green-border); border-radius: var(--radius-sm); padding: 14px; }
+.adv h4 { font-size: 12px; font-weight: 700; color: var(--green); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+.adv p { font-size: 12.5px; color: var(--green); line-height: 1.6; }
+.dis { background: var(--red-bg); border: 1px solid var(--red-border); border-radius: var(--radius-sm); padding: 14px; }
+.dis h4 { font-size: 12px; font-weight: 700; color: var(--red); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+.dis p { font-size: 12.5px; color: var(--red); line-height: 1.6; }
+/* Warning/msg box */
+.msg-box { background: var(--amber-bg); border: 1px solid var(--amber-border); border-radius: var(--radius-sm); padding: 12px 14px; font-size: 13px; color: var(--amber); margin-top: 10px; line-height: 1.6; font-weight: 500; }
+/* Table */
+table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border); }
+th { background: var(--bg3); color: var(--text); font-weight: 600; padding: 10px 14px; text-align: left; }
+td { padding: 10px 14px; color: var(--text2); border-top: 1px solid var(--border); }
+tr:hover td { background: var(--bg3); }
+/* Scroll to top */
+.scroll-top { position: fixed; bottom: 24px; right: 24px; width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--purple)); color: #fff; border: none; cursor: pointer; font-size: 18px; display: none; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(79,110,247,.3); transition: all .3s; z-index: 50; }
+.scroll-top:hover { transform: translateY(-3px) scale(1.05); }
+.scroll-top.visible { display: flex; }
+/* Responsive */
+@media (max-width: 600px) {
+  .header h1 { font-size: 20px; }
+  .adv-dis { grid-template-columns: 1fr; }
+  .toc-btn { font-size: 12px; padding: 6px 12px; }
+}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<div class="guide">
+  <div class="header">
+    <h1>Unit 2 — Ad Hoc Wireless Networks</h1>
+    <p>This is just a overview of the topics in unit 2 and just kinda quick small points. </p>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode" id="themeBtn">🌙</button>
+  </div>
+  <div class="search-wrap">
+    <span class="icon">🔍</span>
+    <input type="text" id="searchBox" placeholder="Search topics, protocols, concepts..." oninput="filterCards()">
+  </div>
+  <div class="toc" id="toc">
+    <button class="toc-btn active" data-target="tabledriven">📋 Table-Driven</button>
+    <button class="toc-btn" data-target="ondemand">🔍 On-Demand</button>
+    <button class="toc-btn" data-target="hybrid">⚡ Hybrid</button>
+    <button class="toc-btn" data-target="hierarchical">🏛️ Hierarchical</button>
+    <button class="toc-btn" data-target="power">🔋 Power-Aware</button>
+    <button class="toc-btn" data-target="transport">🌐 Transport Layer</button>
+    <button class="toc-btn" data-target="tcp">📡 TCP Protocols</button>
+  </div>
+
+  <!-- TABLE DRIVEN -->
+  <div id="sec-tabledriven" class="section active">
+    <div class="section-title">📋 Table-Driven Routing Protocols</div>
+    <div class="section-sub">DSDV · WRP · CGSR — These always keep a ready route table, like a GPS that's always updating the map</div>
+    <div class="card open">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-blue">What is it?</span><h3>The Big Idea</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>These protocols keep an up-to-date routing table at every node at all times — even when no data is being sent. Like how a GPS always knows all roads even before you start navigating.</p>
+        <div class="example-box"><strong>Real Life:</strong> Imagine you have a notebook where you constantly write down directions to every person's house in your city — even if you never visit them. That's a table-driven protocol. Always ready, always updated.</div>
+      </div>
+    </div>
+    <div class="card important">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-blue">Protocol 1</span><h3>DSDV — Destination Sequenced Distance-Vector</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>Each node has a routing table with 4 columns: Destination, Next Hop, Distance (hops), Sequence Number. The sequence number is the key magic — it prevents routing loops!</p>
+        <ul>
+          <li>Based on the Bellman-Ford algorithm</li>
+          <li>Sequence number always increases — newer = larger number</li>
+          <li>2 update types: <strong>Incremental</strong> (small change, 1 packet) and <strong>Full Dump</strong> (big change, multiple packets)</li>
+        </ul>
+        <div class="example-box"><strong>Real Life:</strong> Think of it like WhatsApp "last seen" timestamps. If you get two messages about someone's location, you trust the one with the newer timestamp. DSDV's sequence number works exactly like that — higher number = fresher route. If a node disconnects, neighbours mark its distance as ∞ (infinity) and broadcast that info.</div>
+        <div class="adv-dis">
+          <div class="adv"><h4>✓ Advantages</h4><p>Fast route setup. Loop-free. Extends wired protocols easily.</p></div>
+          <div class="dis"><h4>✗ Disadvantages</h4><p>High overhead when nodes move a lot. Stale info if node waits for destination's update.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="card important">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-blue">Protocol 2</span><h3>WRP — Wireless Routing Protocol</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>Similar to DSDV but uses 4 tables instead of 1 for more accuracy:</p>
+        <ul>
+          <li><strong>Distance Table</strong> — distance + predecessor node</li>
+          <li><strong>Routing Table</strong> — shortest path, predecessor, successor, cost</li>
+          <li><strong>Link Cost Table</strong> — cost of each link, detects broken links</li>
+          <li><strong>Message Retransmission Table</strong> — tracks unconfirmed updates</li>
+        </ul>
+        <div class="example-box"><strong>Real Life:</strong> DSDV is like Google Maps showing you just the best route. WRP is like Google Maps PLUS showing you alternative routes, traffic details, road conditions, AND a history of route changes — much more detailed but uses more memory!</div>
+        <div class="adv-dis">
+          <div class="adv"><h4>✓ Advantages</h4><p>Faster convergence, fewer updates than DSDV.</p></div>
+          <div class="dis"><h4>✗ Disadvantages</h4><p>Needs large memory. Not good for large networks with high mobility.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-blue">Protocol 3</span><h3>CGSR — Cluster-Head Gateway Switch Routing</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>Organises the network into clusters. Each cluster has a leader (Cluster-Head), selected by the LCC (Least Cluster Change) algorithm.</p>
+        <ul>
+          <li><strong>Internal Node</strong> — regular member, communicates through cluster-head</li>
+          <li><strong>Cluster-Head</strong> — leader, schedules routes, forwards to other cluster-heads</li>
+          <li><strong>Gateway Node</strong> — belongs to 2+ clusters, acts as a bridge</li>
+        </ul>
+        <div class="example-box"><strong>Real Life:</strong> Think of a school. Each class (cluster) has a class representative (cluster-head). If you want to send a message to someone in another class, you tell your class rep → who tells the other class rep → who delivers it. The student who sits between two classes and knows both reps is the Gateway node!</div>
+        <div class="adv-dis">
+          <div class="adv"><h4>✓ Advantages</h4><p>Better bandwidth use. Priority scheduling is easy.</p></div>
+          <div class="dis"><h4>✗ Disadvantages</h4><p>Cluster-head drains battery fast. Frequent cluster-head changes = path breaks.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ON DEMAND -->
+  <div id="sec-ondemand" class="section">
+    <div class="section-title">🔍 On-Demand Routing Protocols</div>
+    <div class="section-sub">DSR · AODV · LAR · FORP — Only find a route when you actually need one. Like calling a cab only when you need to travel.</div>
+    <div class="card open">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-amber">What is it?</span><h3>The Big Idea</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>Unlike table-driven, on-demand protocols DON'T maintain routes all the time. They only search for a route when a node wants to send data. This saves bandwidth and battery.</p>
+        <div class="example-box"><strong>Real Life:</strong> Instead of memorising directions to every place in the city, you only look up directions when you actually need to go somewhere. Saves effort but takes a little time to find the route when needed.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-amber">Protocol 1</span><h3>DSR — Dynamic Source Routing</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>The source node discovers the full path to the destination and writes the complete path inside every data packet. 2 phases:</p>
+        <ul>
+          <li><strong>Route Discovery:</strong> Source floods RREQ (Route Request). Destination replies with RREP (Route Reply) containing the full path.</li>
+          <li><strong>Route Maintenance:</strong> If a link breaks, a RERR (Route Error) is sent back to source. Source finds a new route.</li>
+        </ul>
+        <div class="example-box"><strong>Real Life:</strong> Imagine sending a letter and writing the full address of every post office it should pass through on the envelope itself — "Go via Bangalore GPO → Chennai Head Post Office → Mumbai Central PO". Each intermediate post office just reads the label and follows it. That's source routing!</div>
+        <div class="msg-box">Key feature: Each packet carries the complete route. No routing tables at intermediate nodes needed. Uses a Route Cache to remember previously found routes.</div>
+        <div class="adv-dis">
+          <div class="adv"><h4>✓ Advantages</h4><p>No periodic hello messages needed. Uses cache efficiently. No routing table updates.</p></div>
+          <div class="dis"><h4>✗ Disadvantages</h4><p>Broken link doesn't get locally repaired. Small delay at start of new connection.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="card important">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-amber">Protocol 2</span><h3>AODV — Ad Hoc On-Demand Distance-Vector</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>Like DSR but instead of putting the whole path in the packet, each node only stores the "next hop" to reach the destination. 3 message types:</p>
+        <ul>
+          <li><strong>RREQ</strong> — Route Request (sent by source, flooded with TTL)</li>
+          <li><strong>RREP</strong> — Route Reply (sent back by destination or intermediate node with cached route)</li>
+          <li><strong>RERR</strong> — Route Error (sent when a link fails)</li>
+        </ul>
+        <div class="example-box"><strong>Real Life — AODV vs DSR:</strong> In DSR, you carry a full map showing the entire route. In AODV, it's like each road has a signpost saying "next city this way" — you don't need the full map, just follow the signs at each turn (next-hop). AODV uses destination sequence numbers to ensure you always get the freshest, most recent route.</div>
+        <div class="adv-dis">
+          <div class="adv"><h4>✓ Advantages</h4><p>Routes on demand only. Uses sequence numbers for fresh routes. Low connection setup delay.</p></div>
+          <div class="dis"><h4>✗ Disadvantages</h4><p>Intermediate nodes can cause inconsistent routes. Heavy control overhead. Beacon-based.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-amber">Protocol 3</span><h3>LAR — Location-Aided Routing</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>Uses GPS to limit where route requests are flooded. Instead of flooding the ENTIRE network, it restricts flooding to a specific geographic region.</p>
+        <ul>
+          <li><strong>Expected Zone:</strong> Area where destination is likely to be (based on past location + mobility)</li>
+          <li><strong>Request Zone:</strong> Area where RREQ is forwarded (includes Expected Zone + buffer)</li>
+          <li><strong>LAR 1:</strong> Source explicitly puts the Request Zone coordinates in the RREQ</li>
+          <li><strong>LAR 2:</strong> Source includes distance to destination; each forwarder checks if it's getting closer</li>
+        </ul>
+        <div class="example-box"><strong>Real Life:</strong> Imagine you lost your phone somewhere in Koramangala, Bangalore. Instead of asking every person in all of India if they found it, you ask only people in Koramangala (Request Zone). And you know your phone was last seen near a café there (Expected Zone). Much more efficient than asking everyone!</div>
+        <div class="adv-dis">
+          <div class="adv"><h4>✓ Advantages</h4><p>Reduces control overhead. Better bandwidth usage.</p></div>
+          <div class="dis"><h4>✗ Disadvantages</h4><p>Depends heavily on GPS availability.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-amber">Protocol 4</span><h3>FORP — Flow-Oriented Routing Protocol</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>Smart protocol designed for time-sensitive traffic (like video calls). Uses prediction to avoid path breaks BEFORE they happen!</p>
+        <ul>
+          <li><strong>LET (Link Expiry Time):</strong> Predicted lifetime of a wireless link, calculated using position, direction, speed</li>
+          <li><strong>RET (Route Expiry Time):</strong> Minimum LET among all links in a path — when this is about to expire, route handoff begins</li>
+        </ul>
+        <div class="example-box"><strong>Real Life:</strong> Imagine you're driving and Google Maps says "your current route will have heavy traffic in 5 minutes — switching to alternate route now." FORP does exactly this for network paths! It predicts when a link is about to break and proactively switches to a new path before your call drops. This is called flow-handoff.</div>
+        <div class="adv-dis">
+          <div class="adv"><h4>✓ Advantages</h4><p>LET/RET reduces path breaks. Works well in highly dynamic topologies.</p></div>
+          <div class="dis"><h4>✗ Disadvantages</h4><p>Requires time synchronization and GPS. High control overhead.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HYBRID -->
+  <div id="sec-hybrid" class="section">
+    <div class="section-title">⚡ Hybrid Routing Protocols</div>
+    <div class="section-sub">CEDAR · ZRP — Best of both worlds: proactive for nearby nodes, reactive for far nodes</div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-purple">CEDAR</span><h3>Core Extraction Distributed Ad Hoc Routing</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>Selects special "core nodes" (dominators) that form the backbone of the network. Every node is either a core node or is within 3 hops of one.</p>
+        <ul>
+          <li>Core nodes handle routing and QoS path computation</li>
+          <li><strong>Increase-waves (slow):</strong> propagate when link bandwidth increases above threshold</li>
+          <li><strong>Decrease-waves (fast):</strong> rapidly notify when bandwidth drops</li>
+          <li>Finds "shortest-widest path" — shortest path with maximum bandwidth</li>
+        </ul>
+        <div class="example-box"><strong>Real Life:</strong> Think of India's highway system. Not every road is a highway — only certain key roads (core nodes) handle the heavy traffic. If a highway's capacity increases (increase-wave slowly spreads the good news), or if traffic jams start (decrease-wave rapidly warns everyone to avoid it). CEDAR does this for data packets using special nodes as the "highway network".</div>
+        <div class="adv-dis">
+          <div class="adv"><h4>✓ Advantages</h4><p>Efficient QoS support. Increase/decrease waves manage bandwidth info well.</p></div>
+          <div class="dis"><h4>✗ Disadvantages</h4><p>Moving core nodes hurts performance. Core updates cause significant overhead.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-purple">ZRP</span><h3>Zone Routing Protocol</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>Divides each node's "world" into two zones based on hop radius (r). Uses proactive inside the zone, reactive outside it.</p>
+        <ul>
+          <li><strong>IARP (Intra-Zone Routing Protocol):</strong> Proactive routing inside the zone — routes are always ready</li>
+          <li><strong>IERP (Inter-Zone Routing Protocol):</strong> Reactive routing outside the zone — routes found on-demand</li>
+          <li><strong>Peripheral nodes:</strong> nodes exactly at the zone boundary (distance = zone radius)</li>
+        </ul>
+        <div class="example-box"><strong>Real Life:</strong> Imagine you're in Bangalore. You already know all the roads in your neighbourhood (your IARP zone). But if you need to travel to Hyderabad, you search Google Maps only when you need to go (IERP — reactive). ZRP combines both! Small radius = saves storage but more reactive searches. Large radius = stores more but fewer searches needed.</div>
+        <div class="adv-dis">
+          <div class="adv"><h4>✓ Advantages</h4><p>Combines best of proactive and reactive. Reduces control overhead.</p></div>
+          <div class="dis"><h4>✗ Disadvantages</h4><p>Without query control, can still generate high overhead. Zone radius choice is critical.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HIERARCHICAL -->
+  <div id="sec-hierarchical" class="section">
+    <div class="section-title">🏛️ Hierarchical Routing Protocols <span class="imp-star">⭐ IMPORTANT</span></div>
+    <div class="section-sub">HSR · FSR — Organise nodes in levels or scopes to reduce table size and scale better</div>
+    <div class="card important">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-teal">HSR</span><h3>Hierarchical State Routing</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>Organises nodes into clusters at multiple levels — like a company organisational chart. First level clusters are based on physical proximity (1 wireless hop). Higher levels cluster the leaders of lower levels.</p>
+        <ul>
+          <li><strong>Level 0 (Physical):</strong> Actual nodes in wireless range</li>
+          <li><strong>Level 1:</strong> Cluster-heads of Level 0 clusters</li>
+          <li><strong>Level 2+:</strong> Leaders of Level 1 leaders (and so on)</li>
+          <li>Storage needed: O(n×m) vs O(n^m) for flat routing — MUCH less!</li>
+        </ul>
+        <div class="example-box"><strong>Real Life:</strong> Think of Indian Army hierarchy: Soldiers (Level 0) → Platoon Commander (Level 1) → Company Commander (Level 2) → Colonel (Level 3). A message from a soldier to another soldier in a different battalion goes up and down the chain. Nobody needs to know every single soldier directly — only their own level's contacts.</div>
+        <div class="adv-dis">
+          <div class="adv"><h4>✓ Advantages</h4><p>Reduces routing table size dramatically. Great for military applications with natural hierarchy.</p></div>
+          <div class="dis"><h4>✗ Disadvantages</h4><p>Overhead in multi-level packet exchange. Leader election is expensive.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-teal">FSR</span><h3>Fisheye State Routing</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>Inspired by a fish's eye — very sharp focus on close objects, blurry for distant ones. Close nodes get frequent, accurate updates. Far nodes get infrequent, approximate updates.</p>
+        <ul>
+          <li>Defines "scopes" based on number of hops: Scope-1 (1 hop), Scope-2 (2 hops), Scope-3 (&gt;2 hops)</li>
+          <li>Updates exchanged frequently with 1-hop neighbours, less frequently for 2-hop, rarely for beyond</li>
+          <li>No flooding — only exchanges with direct neighbours</li>
+        </ul>
+        <div class="example-box"><strong>Real Life:</strong> Think about how you know your own street very well (Scope-1). You know your neighbourhood somewhat (Scope-2). But you only have rough knowledge about a distant city (Scope-3). FSR applies this same "sharp focus near, blurry far" principle to network routing — saving bandwidth by not updating distant nodes constantly.</div>
+        <div class="adv-dis">
+          <div class="adv"><h4>✓ Advantages</h4><p>Reduces bandwidth usage. Scalable for large, highly mobile networks.</p></div>
+          <div class="dis"><h4>✗ Disadvantages</h4><p>Performance depends on hop count chosen for each scope level. Needs careful tuning.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POWER AWARE -->
+  <div id="sec-power" class="section">
+    <div class="section-title">🔋 Power-Aware Routing Protocols <span class="imp-star">⭐ IMPORTANT</span></div>
+    <div class="section-sub">5 metrics to choose routes that save battery and extend network life</div>
+    <div class="card open">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-teal">Overview</span><h3>Why power awareness matters</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>In ad hoc networks, nodes run on batteries. A node that dies takes all its routes with it. So routing must consider energy, not just speed. 5 key metrics are used:</p>
+        <table>
+          <tr><th>Metric</th><th>Goal</th><th>Simple Example</th></tr>
+          <tr><td>1. Min Energy per Packet</td><td>Use least energy to get from A to B</td><td>Take the shortest road trip to save fuel</td></tr>
+          <tr><td>2. Max Network Connectivity</td><td>Protect the "cut-set" — nodes whose failure splits the network</td><td>Protect the one bridge connecting two parts of a city</td></tr>
+          <tr><td>3. Min Variance in Power</td><td>All nodes drain equally — no one dies first</td><td>Share the carrying load equally among team members</td></tr>
+          <tr><td>4. Min Cost per Packet</td><td>Battery-based cost: low battery = high cost = avoided</td><td>Avoid sending heavy packages through someone with an injured back</td></tr>
+          <tr><td>5. Min Max Node Cost</td><td>Prevent any ONE node from becoming too expensive (overloaded)</td><td>Don't overload one delivery person — spread the deliveries</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRANSPORT LAYER -->
+  <div id="sec-transport" class="section">
+    <div class="section-title">🌐 Transport Layer for Ad Hoc Networks <span class="imp-star">⭐ IMPORTANT</span></div>
+    <div class="section-sub">Why TCP doesn't work well in wireless networks, and what problems designers face</div>
+    <div class="card open">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-blue">Issues (9 problems)</span><h3>Why designing transport for ad hoc is hard</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><strong>1. Induced Traffic:</strong> Wireless broadcast causes a node to receive traffic from many neighbouring paths simultaneously.</li>
+          <li><strong>2. Throughput Unfairness:</strong> Some flows get more bandwidth than others due to MAC and network layer issues.</li>
+          <li><strong>3. Congestion control must be separate from reliability</strong> — congestion is local, reliability is end-to-end.</li>
+          <li><strong>4. Power &amp; bandwidth constraints</strong> — nodes have limited battery.</li>
+          <li><strong>5. Misinterpretation of congestion:</strong> Packet loss in wireless might be due to link errors, not congestion! TCP wrongly slows down.</li>
+          <li><strong>6. Decoupled layers:</strong> Transport must interact with lower layers in wireless (unlike wired where layers are independent).</li>
+          <li><strong>7. Dynamic topology:</strong> Nodes move → paths break → delays in re-establishing.</li>
+          <li><strong>8. Asymmetric links:</strong> Link A→B may be good, but B→A may be weak.</li>
+          <li><strong>9. Sliding window:</strong> TCP's window causes bursty traffic in bandwidth-limited wireless.</li>
+        </ul>
+        <div class="example-box"><strong>Key insight:</strong> In wired networks, packet loss = congestion (almost always). In wireless, packet loss can happen due to signal interference, node movement, hidden terminal problem, or battery death — NOT just congestion. TCP doesn't know the difference and wrongly throttles its speed!</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><h3>Design Goals</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>A good transport protocol for ad hoc wireless should:</p>
+        <ul>
+          <li>Maximize throughput per connection</li>
+          <li>Be fair across all competing flows</li>
+          <li>Have minimum connection setup overhead</li>
+          <li>Handle congestion AND flow control</li>
+          <li>Support both reliable (TCP-like) and unreliable (UDP-like) modes</li>
+          <li>Adapt to topology changes quickly</li>
+          <li>Use battery and bandwidth efficiently</li>
+          <li>Interact with lower layers (cross-layer design)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TCP PROTOCOLS -->
+  <div id="sec-tcp" class="section">
+    <div class="section-title">📡 TCP Protocols over Ad Hoc Networks</div>
+    <div class="section-sub">TCP-F · TCP-ELFN · TCP-BuS · ATCP · Split-TCP · ACTP · ATP</div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-blue">TCP-F</span><h3>TCP Feedback (TCP-F)</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>When a path breaks, the intermediate node (Failure Point) sends an RFN (Route Failure Notification) back to the TCP sender. Sender goes into "Snooze State" — stops sending, freezes timers. When route is re-established, an RRN (Route Re-establishment Notification) wakes the sender up.</p>
+        <div class="example-box"><strong>Real Life:</strong> You're sending WhatsApp messages and your internet cuts out. Instead of your phone madly retrying (which wastes battery), it gets notified "network down — please wait." You pause. When internet is back, you resume. TCP-F does exactly this — prevents useless retransmissions during a path break.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-blue">TCP-ELFN</span><h3>TCP with Explicit Link Failure Notification</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>When a link fails, the detecting node sends an ELFN message (via ICMP Destination Unreachable) to the TCP sender. Sender pauses and sends periodic probe packets to check if a new route is available. When an ACK returns, normal operation resumes.</p>
+        <div class="example-box"><strong>Real Life:</strong> Imagine you're video calling and the call drops. Instead of your phone endlessly trying to reconnect to the same dead connection, it quietly checks every few seconds "is the network back?" without wasting data. That's ELFN — send probes, wait for a reply, then resume.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-blue">TCP-BuS</span><h3>TCP with Buffering and Sequence Info</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>More intelligent than TCP-F. When a path breaks, the "Pivot Node" (PN) buffers packets and searches for an alternate path. Uses ERDN (disconnection notification) and ERSN (reconnection notification). LQ and REPLY messages help source know what to resend.</p>
+        <div class="example-box"><strong>Real Life:</strong> You're sending files over a network. The connection breaks at an intermediate server. Instead of telling you immediately, that server buffers your in-transit files, quickly finds an alternate route, and only tells you if it can't fix it. When fixed, it sends "resume from packet 9" — so you don't resend packets 1–8 that were already received!</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-amber">ATCP</span><h3>Ad Hoc TCP (ATCP)</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>Sits between TCP and IP layer. Monitors network conditions and switches TCP into the right state:</p>
+        <ul>
+          <li><strong>Normal state:</strong> Everything fine, transmit normally</li>
+          <li><strong>Loss state:</strong> 3 duplicate ACKs received → retransmit without reducing window</li>
+          <li><strong>Congestion state:</strong> ECN received → reduce data flow (real congestion!)</li>
+          <li><strong>Disconnected state:</strong> DUR received → pause completely, don't waste packets</li>
+        </ul>
+        <div class="example-box"><strong>Real Life:</strong> ATCP is like a smart assistant between you and a customer. The assistant watches network conditions and tells TCP exactly what's happening: "slow down — traffic jam ahead (congestion)", "wait — road is closed (disconnected)", "keep going — all clear (normal)". TCP doesn't need to guess!</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-amber">Split-TCP</span><h3>Split TCP</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>Breaks a long TCP connection into short segments (zones) using intermediate Proxy Nodes. Proxy nodes give Local ACKs (LACK) — they don't guarantee end-to-end delivery but speed up local acknowledgements. Splits the job into: congestion control (local) + end-to-end reliability (global).</p>
+        <div class="example-box"><strong>Real Life:</strong> Think of shipping a package from Bangalore to London via Mumbai. Instead of waiting for London to confirm receipt before Bangalore gets an ACK, the Bangalore warehouse gets a local confirmation from Mumbai ("we have the package"). Mumbai handles getting it to London. The whole chain works in parallel — much faster!</div>
+        <div class="adv-dis">
+          <div class="adv"><h4>✓ Advantages</h4><p>Better throughput &amp; fairness. Less impact from node mobility.</p></div>
+          <div class="dis"><h4>✗ Disadvantages</h4><p>Violates TCP's end-to-end semantics. Proxy node failure hurts performance.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-teal">ACTP</span><h3>Application Controlled Transport Protocol</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>Gives reliability control to the application itself. Sits between TCP (high reliability, lower performance) and UDP (low reliability, high performance). Application can set packet priority, tolerate some loss, and decide what to retransmit.</p>
+        <div class="example-box"><strong>Real Life:</strong> Like a customizable delivery service. For critical documents — use full tracking. For a casual greeting card — no tracking needed. ACTP lets the APP decide how reliable it needs to be, rather than forcing all-or-nothing like TCP.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div><span class="badge badge-teal">ATP</span><h3>Ad Hoc Transport Protocol</h3></div>
+        <button class="card-toggle">▼</button>
+      </div>
+      <div class="card-body">
+        <p>Fully designed from scratch for wireless ad hoc networks. Uses rate-based transmission (not window-based like TCP). Collects congestion info from intermediate nodes and reliability info from the receiver.</p>
+        <ul>
+          <li>Quick Start: probes network to find ideal initial transmission rate</li>
+          <li>3 phases: increase rate → decrease rate → maintain rate</li>
+          <li>Decouples congestion control from reliability</li>
+        </ul>
+        <div class="example-box"><strong>Real Life:</strong> TCP is like filling a bucket with water — you keep pouring faster until it overflows (congestion), then reduce. ATP is like a smart irrigation system that asks the soil "how much water can you absorb right now?" and adjusts the flow accordingly — much smarter, no overflow!</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// TOC navigation
+document.querySelectorAll('.toc-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const target = this.dataset.target;
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.toc-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('sec-' + target).classList.add('active');
+    this.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+// Card toggle
+function toggleCard(header) {
+  header.closest('.card').classList.toggle('open');
+}
+
+// Theme toggle
+function toggleTheme() {
+  const html = document.documentElement;
+  const btn = document.getElementById('themeBtn');
+  if (html.dataset.theme === 'dark') {
+    html.dataset.theme = 'light'; btn.textContent = '🌙';
+  } else {
+    html.dataset.theme = 'dark'; btn.textContent = '☀️';
+  }
+  localStorage.setItem('theme', html.dataset.theme);
+}
+// Restore theme
+const saved = localStorage.getItem('theme');
+if (saved) { document.documentElement.dataset.theme = saved; document.getElementById('themeBtn').textContent = saved === 'dark' ? '☀️' : '🌙'; }
+
+// Search/filter
+function filterCards() {
+  const q = document.getElementById('searchBox').value.toLowerCase();
+  document.querySelectorAll('.card').forEach(c => {
+    c.style.display = c.textContent.toLowerCase().includes(q) || !q ? '' : 'none';
+  });
+  if (q) {
+    document.querySelectorAll('.section').forEach(s => {
+      const hasVisible = [...s.querySelectorAll('.card')].some(c => c.style.display !== 'none');
+      s.style.display = hasVisible ? 'block' : 'none';
+      if (hasVisible) s.classList.add('active');
+    });
+    document.querySelectorAll('.toc-btn').forEach(b => b.classList.remove('active'));
+  } else {
+    document.querySelectorAll('.section').forEach(s => { s.style.display = ''; s.classList.remove('active'); });
+    const firstBtn = document.querySelector('.toc-btn');
+    firstBtn.classList.add('active');
+    document.getElementById('sec-' + firstBtn.dataset.target).classList.add('active');
+  }
+}
+
+// Progress bar
+window.addEventListener('scroll', () => {
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('progressBar').style.width = (window.scrollY / h * 100) + '%';
+  document.getElementById('scrollTopBtn').classList.toggle('visible', window.scrollY > 300);
+});
+
+// Keyboard nav (1-7 for sections)
+document.addEventListener('keydown', e => {
+  const n = parseInt(e.key);
+  if (n >= 1 && n <= 7) {
+    const btns = document.querySelectorAll('.toc-btn');
+    if (btns[n-1]) btns[n-1].click();
+  }
+});
+</script>
+</body>
+</html>
